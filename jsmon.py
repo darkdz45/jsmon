@@ -155,10 +155,7 @@ def notify_discord(endpoint,prev, new, diff, prevsize,newsize):
     fpayload = {
         "file": ('diff.html', diff)
     }
-    requests.post("DISCORD_WEBHOOK_URL",
-# files={"file": open("diff.html", "rb")},data=payload
-files=fpayload,data=payload
- )
+    requests.post("DISCORD_WEBHOOK_URL",files=fpayload,data=payload )
  
 def notify(endpoint, prev, new):
     diff = get_diff(prev,new)
