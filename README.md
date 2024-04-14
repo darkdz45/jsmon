@@ -79,3 +79,5 @@ All done ! now you can run `python jsmon.py` to download the specified files for
 
 [@Yassineaboukir](https://twitter.com/Yassineaboukir) - Slack Notifications
 
+[@seczq](https://twitter.com/seczq) - Discord Notifications
+
