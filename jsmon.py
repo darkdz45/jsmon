@@ -166,7 +166,9 @@ def notify(endpoint, prev, new):
 
     if NOTIFY_SLACK:
         notify_slack(endpoint, prev, new, diff, prevsize, newsize)
-
+    
+    if NOTIFY_DISCORD:
+        notify_discord(endpoint, prev, new, diff, prevsize, newsize)
 
 def main():
     print("JSMon - Web File Monitor")
