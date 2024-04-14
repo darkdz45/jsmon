@@ -14,8 +14,10 @@ TELEGRAM_TOKEN = config("JSMON_TELEGRAM_TOKEN", default="CHANGEME")
 TELEGRAM_CHAT_ID = config("JSMON_TELEGRAM_CHAT_ID", default="CHANGEME")
 SLACK_TOKEN = config("JSMON_SLACK_TOKEN", default="CHANGEME")
 SLACK_CHANNEL_ID = config("JSMON_SLACK_CHANNEL_ID", default="CHANGEME")
+DISCORD_WEBHOOK = config("JSMON_DISCORD_WEBHOOK", default="CHANGEME")
 NOTIFY_SLACK = config("JSMON_NOTIFY_SLACK", default=False, cast=bool)
 NOTIFY_TELEGRAM = config("JSMON_NOTIFY_TELEGRAM", default=False, cast=bool)
+NOTIFY_DISCORD = config("JSMON_NOTIFY_DISCORD", default=True, cast=bool)
 if NOTIFY_SLACK:
     from slack import WebClient
     from slack.errors import SlackApiError
@@ -144,7 +146,20 @@ def notify_slack(endpoint,prev, new, diff, prevsize,newsize):
         assert e.response["ok"] is False
         assert e.response["error"]  # str like 'invalid_auth', 'channel_not_found'
         print(f"Got an error: {e.response['error']}")
-
+        
+def notify_discord(endpoint,prev, new, diff, prevsize,newsize):
+    payload = {
+	    "username": "JSMon",
+		"content":"{} has been updated from ***{}***  (***{}*** Bytes) to ***{}***  (***{}*** Bytes)".format(endpoint, prev,prevsize, new,newsize)  
+    }
+    fpayload = {
+        "file": ('diff.html', diff)
+    }
+    requests.post("DISCORD_WEBHOOK_URL",
+# files={"file": open("diff.html", "rb")},data=payload
+files=fpayload,data=payload
+ )
+ 
 def notify(endpoint, prev, new):
     diff = get_diff(prev,new)
     prevsize = get_file_stats(prev).st_size
@@ -160,13 +175,15 @@ def main():
     print("JSMon - Web File Monitor")
 
 
-    if not(NOTIFY_SLACK or NOTIFY_TELEGRAM):
+    if not(NOTIFY_SLACK or NOTIFY_TELEGRAM or NOTIFY_DISCORD):
         print("You need to setup Slack or Telegram Notifications of JSMon to work!")
         exit(1)
     if NOTIFY_TELEGRAM and "CHANGEME" in [TELEGRAM_TOKEN, TELEGRAM_CHAT_ID]:
         print("Please Set Up your Telegram Token And Chat ID!!!")
     if NOTIFY_SLACK and "CHANGEME" in [SLACK_TOKEN, SLACK_CHANNEL_ID]:
         print("Please Set Up your Sllack Token And Channel ID!!!")
+    #if NOTIFY_DISCORD and "CHANGEME" in [DISCORD_WEBHOOK]:
+        #print("Please Set Up your Discord Webhook URL!!!")	
         
     allendpoints = get_endpoint_list('targets')
 
