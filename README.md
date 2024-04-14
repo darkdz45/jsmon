@@ -57,6 +57,7 @@ All done ! now you can run `python jsmon.py` to download the specified files for
 
 - Keep Track of endpoints - check them in a configurable interval (using cron)
 - when endpoints change - send a notification via Telegram or Slack
+- Add Discord Notification By @seczq
 
 
 
