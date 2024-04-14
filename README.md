@@ -59,7 +59,7 @@ All done ! now you can run `python jsmon.py` to download the specified files for
 - when endpoints change - send a notification via Telegram or Slack
 - Add Discord Notification By @seczq
 
-
+![](discord.png)
 
 ## Usage
 
